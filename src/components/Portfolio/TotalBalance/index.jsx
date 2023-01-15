@@ -8,6 +8,7 @@ import { getNFTsUsdValue } from 'utils/APIs/TopazAPI'
 import { getUserStakedAptoadsUSD } from 'utils/Ecosystem/Aptoads'
 import { getUserStakedMonkeysUSD } from 'utils/Ecosystem/AptosMonkeys'
 import { getUserStakedBearsUSD } from 'utils/Ecosystem/BruhTavern'
+import { getUserStakedMavrikUSD } from 'utils/Ecosystem/Mavrik'
 
 const Index = ({ walletAddress, aptBalance, nftBalances, tokensBalance }) => {
   const [isLoading, setIsLoading] = useState(Boolean)
@@ -23,7 +24,8 @@ const Index = ({ walletAddress, aptBalance, nftBalances, tokensBalance }) => {
     const getStakedToadsUSD = await getUserStakedAptoadsUSD(walletAddress)
     const getStakedMonkeysUSD = await getUserStakedMonkeysUSD(walletAddress)
     const getStakedBearsUSD = await getUserStakedBearsUSD(walletAddress)
-    const usdValue = nftsUSD + tokensUSD + aptUSD + getStakedToadsUSD + getStakedMonkeysUSD + getStakedBearsUSD
+    const getStakedMavrikUSD = await getUserStakedMavrikUSD(walletAddress)
+    const usdValue = nftsUSD + tokensUSD + aptUSD + getStakedToadsUSD + getStakedMonkeysUSD + getStakedBearsUSD + getStakedMavrikUSD
     setTotalUsd(usdValue)
 
     setIsLoading(false)

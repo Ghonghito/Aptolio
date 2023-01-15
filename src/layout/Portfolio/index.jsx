@@ -4,6 +4,7 @@ import Alert from 'components/Alerts'
 import AptoadsStaking from 'components/EcosystemProjects/Aptoads'
 import AptosMonkeysJungle from 'components/EcosystemProjects/AptosMonkeys'
 import BruhBearsTaverns from 'components/EcosystemProjects/BruhBears'
+import MavrikStaking from 'components/EcosystemProjects/Mavrik'
 import { NFTTable, StatisticCard, TokenTable, Transactions } from 'components/Portfolio'
 import TotalBalance from 'components/Portfolio/TotalBalance'
 import ConnectButton from 'components/WalletConnection/ConnectButton'
@@ -77,7 +78,10 @@ const Index = () => {
                         <AptosMonkeysJungle walletAddress={account.address} />
                         <AptoadsStaking walletAddress={account.address} />
                       </div>
-                      <BruhBearsTaverns walletAddress={account.address} />
+                      <div className='flex flex-col gap-2'>
+                        <BruhBearsTaverns walletAddress={account.address} />
+                        <MavrikStaking walletAddress={account.address} />
+                      </div>
                     </div>
                   </Tab.Panel>
                   <Tab.Panel>
