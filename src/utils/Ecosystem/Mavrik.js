@@ -34,7 +34,7 @@ export const getStakedMavriks = async (walletAddress) => {
     .get(`https://fullnode.mainnet.aptoslabs.com/v1/accounts/${walletAddress}/resource/0x389dbbc6884a1d5b1ab4e1df2913a8c1b01251e50aed377554372b2842c5e3ef::tokenstaking::StakedTokenInfo`)
     .then((response) => response)
     .catch((error) => error.response)
-
+  console.log(data)
   if (data.status === 200) {
     if (data.data.data.hasOwnProperty('staked_nfts')) {
       if (Object.keys(data.data.data.staked_nfts).length > 0) {
@@ -55,7 +55,11 @@ export const getStakedMavriks = async (walletAddress) => {
       return { status: 404, statusCode: 'info', statusText: 'User has no staked Mavrik 1' }
     }
   } else {
-    return { status: 404, statusCode: 'error', statusText: 'API connection failed! try again!' }
+    if (data.data.error_code === 'resource_not_found') {
+      return { status: 404, statusCode: 'info', statusText: 'User has no staked Mavrik' }
+    } else {
+      return { status: 404, statusCode: 'error', statusText: 'API connection failed! try again!' }
+    }
   }
 }
 

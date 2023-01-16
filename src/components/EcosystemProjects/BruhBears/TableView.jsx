@@ -2,7 +2,7 @@ import React from 'react'
 import Typography from 'components/Typography'
 import WithdrawButton from './WithdrawButton'
 
-const TableView = ({ data }) => {
+const TableView = ({ data, isChecking }) => {
   return (
     <div>
       <div className='overflow-y-auto'>
@@ -21,7 +21,7 @@ const TableView = ({ data }) => {
               <th scope='col' className='border-b border-darkBorder px-6 py-3'>
                 STAKED
               </th>
-              <th scope='col' className='border-b border-darkBorder px-6 py-3'></th>
+              {isChecking === true ? null : <th scope='col' className='border-b border-darkBorder px-6 py-3'></th>}
             </tr>
           </thead>
           <tbody>
@@ -42,9 +42,11 @@ const TableView = ({ data }) => {
                 <th className='border-b border-darkBorder px-6 py-4'>
                   <Typography className='font-light whitespace-nowrap'>{x.tokens.stakedAt}</Typography>
                 </th>
-                <th className='border-b border-darkBorder px-6 py-4'>
-                  <WithdrawButton data={x.tokens} />
-                </th>
+                {isChecking === true ? null : (
+                  <th className='border-b border-darkBorder px-6 py-4'>
+                    <WithdrawButton data={x.tokens} />
+                  </th>
+                )}
               </tr>
             ))}
           </tbody>

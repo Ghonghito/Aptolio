@@ -9,7 +9,7 @@ import TableView from './TableView'
 import { BiListUl } from 'react-icons/bi'
 import { HiOutlineViewGrid } from 'react-icons/hi'
 
-const Index = ({ walletAddress }) => {
+const Index = ({ walletAddress, isChecking }) => {
   const [data, setData] = useState([])
   const [gridView, setGridView] = useState(true)
 
@@ -70,7 +70,7 @@ const Index = ({ walletAddress }) => {
                                       STAKED AT {x.tokens.stakedAt}
                                     </Typography>
                                   </div>
-                                  <WithdrawButton data={x.tokens} />
+                                  {isChecking === true ? null : <WithdrawButton data={x.tokens} />}
                                 </div>
                               </Card>
                             ))}
@@ -78,7 +78,7 @@ const Index = ({ walletAddress }) => {
                         </div>
                       ) : (
                         <div>
-                          <TableView data={data} />
+                          <TableView data={data} isChecking={isChecking} />
                         </div>
                       )}
                     </div>

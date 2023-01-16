@@ -2,7 +2,7 @@ import Typography from 'components/Typography'
 import moment from 'moment'
 import WithdrawButton from './WithdrawButton'
 
-const TableView = ({ data }) => {
+const TableView = ({ data, isChecking }) => {
   const calculateStakedTime = (timestamp) => {
     const currentDate = moment()
     const stakedTime = moment(timestamp * 1000)
@@ -34,7 +34,7 @@ const TableView = ({ data }) => {
               <th scope='col' className='border-b border-darkBorder px-6 py-3 whitespace-nowrap'>
                 STAKED AT
               </th>
-              <th scope='col' className='border-b border-darkBorder px-6 py-3 whitespace-nowrap'></th>
+              {isChecking === true ? null : <th scope='col' className='border-b border-darkBorder px-6 py-3 whitespace-nowrap'></th>}
             </tr>
           </thead>
           <tbody>
@@ -55,9 +55,11 @@ const TableView = ({ data }) => {
                 <th className='border-b border-darkBorder px-6 py-4'>
                   <Typography className='font-light whitespace-nowrap'>{moment(Number(x.token_stake_data.initial_lockup_timestamp) * 1000).format('DD/MM/YYYY HH:mm')}</Typography>
                 </th>
-                <th className='border-b border-darkBorder px-6 py-4'>
-                  <WithdrawButton data={x.token.id.token_data_id.name} />
-                </th>
+                {isChecking === true ? null : (
+                  <th className='border-b border-darkBorder px-6 py-4'>
+                    <WithdrawButton data={x.token.id.token_data_id.name} />
+                  </th>
+                )}
               </tr>
             ))}
           </tbody>

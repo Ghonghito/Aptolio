@@ -10,7 +10,7 @@ import { getUserStakedAptoads } from 'utils/Ecosystem/Aptoads'
 import TableView from './TableView'
 import WithdrawButton from './WithdrawButton'
 
-const Index = ({ walletAddress }) => {
+const Index = ({ walletAddress, isChecking }) => {
   const [gridView, setGridView] = useState(true)
   const [data, setData] = useState([])
 
@@ -97,19 +97,21 @@ const Index = ({ walletAddress }) => {
                             <Typography className='text-xs mt-1' color='text-gray-400'>
                               STAKED AT {moment(Number(x.token_stake_data.initial_lockup_timestamp) * 1000).format('DD/MM/YYYY HH:mm')}
                             </Typography>
-                            <WithdrawButton
-                              data={x.token.id.token_data_id.name}
-                              earnedFly={calculatePendingToken(Number(x.token_stake_data.initial_lockup_timestamp))}
-                              daysStaked={calculateStakedTime(Number(x.token_stake_data.initial_lockup_timestamp))}
-                              stakedAt={moment(Number(x.token_stake_data.initial_lockup_timestamp) * 1000).format('DD/MM/YYYY HH:mm')}
-                            />
+                            {isChecking === true ? null : (
+                              <WithdrawButton
+                                data={x.token.id.token_data_id.name}
+                                earnedFly={calculatePendingToken(Number(x.token_stake_data.initial_lockup_timestamp))}
+                                daysStaked={calculateStakedTime(Number(x.token_stake_data.initial_lockup_timestamp))}
+                                stakedAt={moment(Number(x.token_stake_data.initial_lockup_timestamp) * 1000).format('DD/MM/YYYY HH:mm')}
+                              />
+                            )}
                           </div>
                         </Card>
                       ))}
                     </div>
                   ) : (
                     <div>
-                      <TableView data={data} />
+                      <TableView data={data} isChecking={isChecking} />
                     </div>
                   )}
                 </div>

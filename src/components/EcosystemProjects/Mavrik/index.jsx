@@ -9,7 +9,7 @@ import { getStakedMavriks } from 'utils/Ecosystem/Mavrik'
 import TableView from './TableView'
 import WithdrawButton from './WithdrawButton'
 
-const Index = ({ walletAddress }) => {
+const Index = ({ walletAddress, isChecking }) => {
   const [data, setData] = useState([])
   const [gridView, setGridView] = useState(true)
 
@@ -52,7 +52,7 @@ const Index = ({ walletAddress }) => {
                                     <Typography className='text-sm py-1' color='text-gray-400'>
                                       {x}
                                     </Typography>
-                                    <WithdrawButton data={data.stakedData[index]} />
+                                    {isChecking === true ? null : <WithdrawButton data={data.stakedData[index]} />}
                                   </div>
                                 </Card>
                               ))}
@@ -60,7 +60,7 @@ const Index = ({ walletAddress }) => {
                           </div>
                         ) : (
                           <div>
-                            <TableView data={data} />
+                            <TableView data={data} isChecking={isChecking} />
                           </div>
                         )}
                       </div>

@@ -1,4 +1,9 @@
 import AddressSearchBar from 'components/AddressSearchBar'
+import AptoadsStaking from 'components/EcosystemProjects/Aptoads'
+import AptosMonkeysJungle from 'components/EcosystemProjects/AptosMonkeys'
+import BruhBearsTaverns from 'components/EcosystemProjects/BruhBears'
+import MavrikStaking from 'components/EcosystemProjects/Mavrik'
+import TotalBalance from 'components/Portfolio/TotalBalance'
 import { NFTTable, StatisticCard, TokenTable, Transactions } from 'components/Portfolio'
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
@@ -49,7 +54,8 @@ const Index = () => {
       </div>
       {walletAddress !== undefined && (
         <div>
-          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols3 lg:grid-cols-4 gap-2'>
+          <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols3 lg:grid-cols-5 gap-2'>
+            <TotalBalance walletAddress={walletAddress} aptBalance={userAPTBalance} nftBalances={userNFTs} tokensBalance={userTokens} />
             <StatisticCard title='APT Balance' data={userAPTBalance} isLoading={isLoading} />
             <StatisticCard title='Tokens' data={userTokens} isLoading={isLoading} />
             <StatisticCard title='NFTs' data={userNftsCount} isLoading={isLoading} />
@@ -57,8 +63,16 @@ const Index = () => {
           </div>
           <div>
             <div className='grid grid-cols-1 md:grid-cols-2 gap-2 mt-2'>
-              <TokenTable tokensBalance={userTokens} isChecking={true} />
-              <NFTTable data={userNFTs} isChecking={true} />
+              <div className='flex flex-col gap-2'>
+                <TokenTable tokensBalance={userTokens} isChecking={true} />
+                <AptosMonkeysJungle walletAddress={walletAddress} isChecking={true} />
+                <AptoadsStaking walletAddress={walletAddress} isChecking={true} />
+              </div>
+              <div className='flex flex-col gap-2'>
+                <NFTTable data={userNFTs} isChecking={true} />
+                <BruhBearsTaverns walletAddress={walletAddress} isChecking={true} />
+                <MavrikStaking walletAddress={walletAddress} isChecking={true} />
+              </div>
             </div>
             <div className='mt-2'>
               <Transactions walletAddress={walletAddress} />
