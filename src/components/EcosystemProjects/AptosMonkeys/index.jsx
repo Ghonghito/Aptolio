@@ -10,7 +10,7 @@ import { BiListUl } from 'react-icons/bi'
 import { HiOutlineViewGrid } from 'react-icons/hi'
 import TableView from './TableView'
 
-const Index = ({ walletAddress, isChecking }) => {
+const Index = ({ walletAddress, stakedList, isChecking }) => {
   const [data, setData] = useState([])
   const [gridView, setGridView] = useState(true)
 
@@ -28,9 +28,13 @@ const Index = ({ walletAddress, isChecking }) => {
   }
 
   useEffect(() => {
-    getJungleData()
+    if (stakedList === undefined) {
+      getJungleData()
+    } else {
+      setData(stakedList)
+    }
     // eslint-disable-next-line
-  }, [walletAddress])
+  }, [walletAddress, stakedList])
 
   return (
     <div className=''>

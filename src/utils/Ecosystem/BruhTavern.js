@@ -68,12 +68,18 @@ export const checkTavern = async (address) => {
   }
 }
 
-export const getUserStakedBearsUSD = async (address) => {
+export const getUserStakedBearsUSD = async (data) => {
   const getBearsFP = await getFloorPrice('0x43ec2cb158e3569842d537740fd53403e992b9e7349cc5d3dfaa5aff8faaef2::Bruh Bears')
   const aptFloor = Number(getBearsFP.data.data.floor) / 10 ** 8
   const getAPTPrice = await getCoinData('aptos')
   const aptPrice = getAPTPrice.data.market_data.current_price.usd
-  const getStakedBears = await checkTavern(address)
+
+  let getStakedBears = null
+  if (typeof data === 'string') {
+    getStakedBears = await checkTavern(data)
+  } else {
+    getStakedBears = data
+  }
 
   if (getStakedBears.status === 200 && getStakedBears.staked === true) {
     const numberOfBears = getStakedBears.data.length

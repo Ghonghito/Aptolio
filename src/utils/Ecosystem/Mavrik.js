@@ -34,7 +34,6 @@ export const getStakedMavriks = async (walletAddress) => {
     .get(`https://fullnode.mainnet.aptoslabs.com/v1/accounts/${walletAddress}/resource/0x389dbbc6884a1d5b1ab4e1df2913a8c1b01251e50aed377554372b2842c5e3ef::tokenstaking::StakedTokenInfo`)
     .then((response) => response)
     .catch((error) => error.response)
-  console.log(data)
   if (data.status === 200) {
     if (data.data.data.hasOwnProperty('staked_nfts')) {
       if (Object.keys(data.data.data.staked_nfts).length > 0) {
@@ -63,12 +62,18 @@ export const getStakedMavriks = async (walletAddress) => {
   }
 }
 
-export const getUserStakedMavrikUSD = async (address) => {
+export const getUserStakedMavrikUSD = async (data) => {
   const getMavrikFP = await getFloorPrice('0xf3778cf4d8b6d61ab3d79c804797ef7417e258449d2735b0f405e604b81f7916::MAVRIK')
   const aptFloor = Number(getMavrikFP.data.data.floor) / 10 ** 8
   const getAPTPrice = await getCoinData('aptos')
   const aptPrice = getAPTPrice.data.market_data.current_price.usd
-  const getStakedMavrik = await getStakedMavriks(address)
+  let getStakedMavrik = null
+
+  if (typeof data === 'string') {
+    getStakedMavrik = await getStakedMavriks(data)
+  } else {
+    getStakedMavrik = data
+  }
 
   if (getStakedMavrik.status === 200 && getStakedMavrik.staked === true) {
     const numberOfMavrik = Object.keys(getStakedMavrik.data).length

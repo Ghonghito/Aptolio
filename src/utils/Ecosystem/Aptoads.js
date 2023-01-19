@@ -36,7 +36,6 @@ export const getUserStakedHandle = async (address) => {
 export const getUserStakedAptoads = async (address) => {
   const getToads = await getUserToads(address)
   const getHandle = await getUserStakedHandle(address)
-
   var stakedToads = []
 
   if (Object.keys(getToads).length > 0) {
@@ -91,13 +90,17 @@ export const getUserStakedAptoads = async (address) => {
   }
 }
 
-export const getUserStakedAptoadsUSD = async (address) => {
+export const getUserStakedAptoadsUSD = async (data) => {
   const getToadsFP = await getFloorPrice('0x74b6b765f6710a0c24888643babfe337241ad1888a55e33ed86f389fe3f13f52::Aptos Toad Overload')
   const aptFloor = Number(getToadsFP.data.data.floor) / 10 ** 8
   const getAPTPrice = await getCoinData('aptos')
   const aptPrice = getAPTPrice.data.market_data.current_price.usd
-  const getStakedToads = await getUserStakedAptoads(address)
-
+  let getStakedToads = null
+  if (typeof data === 'string') {
+    getStakedToads = await getUserStakedAptoads(data)
+  } else {
+    getStakedToads = data
+  }
   if (!getStakedToads.hasOwnProperty('status')) {
     const numberOfToads = getStakedToads.length
     const AptValue = aptFloor * numberOfToads

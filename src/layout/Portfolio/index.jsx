@@ -10,6 +10,10 @@ import TotalBalance from 'components/Portfolio/TotalBalance'
 import ConnectButton from 'components/WalletConnection/ConnectButton'
 import { useEffect, useState } from 'react'
 import { getWalletAPTBalance, getWalletNftBalance, getWalletNFTsCount, getWalletTokensBalance, getWalletTransactionsCount } from 'utils/APIs/AptosAPI'
+import { checkJungle } from 'utils/Ecosystem/AptosMonkeys'
+import { getUserStakedAptoads } from 'utils/Ecosystem/Aptoads'
+import { getStakedMavriks } from 'utils/Ecosystem/Mavrik'
+import { checkTavern } from 'utils/Ecosystem/BruhTavern'
 
 const Index = () => {
   const { account, connected } = useWallet()
@@ -19,6 +23,10 @@ const Index = () => {
   const [nftBalances, setNftBalances] = useState([])
   const [txsCount, setTxsCount] = useState([])
   const [nftsCount, setNftsCount] = useState([])
+  const [monkeysList, setMonkeyList] = useState([])
+  const [toadList, setToadList] = useState([])
+  const [mavrikList, setMavrikList] = useState([])
+  const [bruhList, setBruhList] = useState([])
 
   const classNames = (...classes) => {
     return classes.filter(Boolean).join(' ')
@@ -28,17 +36,32 @@ const Index = () => {
     setAptBalance([])
     setCoinBalances([])
     setNftBalances([])
+    setMonkeyList([])
+    setToadList([])
+    setMavrikList([])
+    setBruhList([])
 
     const getNftsCount = await getWalletNFTsCount(account.address)
     const getAptBalance = await getWalletAPTBalance(account.address)
     const getCoinBalance = await getWalletTokensBalance(account.address)
     const getNFTsBalance = await getWalletNftBalance(account.address, 100, 0, getNftsCount?.data?.data?.current_token_ownerships_aggregate?.aggregate?.count)
     const getTxsCount = await getWalletTransactionsCount(account.address)
+
+    const getJungleData = await checkJungle(account.address)
+    const getToadsData = await getUserStakedAptoads(account.address)
+    const getMavrikData = await getStakedMavriks(account.address)
+    const getBruhData = await checkTavern(account.address)
+
     setAptBalance(getAptBalance)
     setCoinBalances(getCoinBalance)
     setNftBalances(getNFTsBalance)
     setTxsCount(getTxsCount)
     setNftsCount(getNftsCount)
+
+    setMonkeyList(getJungleData)
+    setToadList(getToadsData)
+    setMavrikList(getMavrikData)
+    setBruhList(getBruhData)
     setIsLoading(false)
   }
 
@@ -46,6 +69,11 @@ const Index = () => {
     if (connected) {
       getUserData()
     }
+
+    return () => {
+      console.log('STOP')
+    }
+
     // eslint-disable-next-line
   }, [connected])
 
@@ -54,7 +82,7 @@ const Index = () => {
       {connected === true ? (
         <div>
           <div className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2'>
-            <TotalBalance walletAddress={account.address} aptBalance={aptBalance} nftBalances={nftBalances} tokensBalance={coinBalances} />
+            <TotalBalance walletAddress={account.address} aptBalance={aptBalance} nftBalances={nftBalances} tokensBalance={coinBalances} stakedAptoads={toadList} stakedMonkeys={monkeysList} stakedMavriks={mavrikList} stakedBruhs={bruhList} />
             <StatisticCard title='APT Balance' data={aptBalance} isLoading={isLoading} />
             <StatisticCard title='Tokens' data={coinBalances} isLoading={isLoading} />
             <StatisticCard title='NFTs' data={nftsCount} isLoading={isLoading} />
@@ -75,12 +103,12 @@ const Index = () => {
                   <Tab.Panel>
                     <div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
                       <div className='flex flex-col gap-2'>
-                        <AptosMonkeysJungle walletAddress={account.address} />
-                        <AptoadsStaking walletAddress={account.address} />
+                        <AptosMonkeysJungle stakedList={monkeysList} />
+                        <AptoadsStaking stakedList={toadList} />
                       </div>
                       <div className='flex flex-col gap-2'>
-                        <BruhBearsTaverns walletAddress={account.address} />
-                        <MavrikStaking walletAddress={account.address} />
+                        <BruhBearsTaverns stakedList={bruhList} />
+                        <MavrikStaking stakedList={mavrikList} />
                       </div>
                     </div>
                   </Tab.Panel>

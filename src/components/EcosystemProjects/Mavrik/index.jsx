@@ -9,7 +9,7 @@ import { getStakedMavriks } from 'utils/Ecosystem/Mavrik'
 import TableView from './TableView'
 import WithdrawButton from './WithdrawButton'
 
-const Index = ({ walletAddress, isChecking }) => {
+const Index = ({ walletAddress, stakedList, isChecking }) => {
   const [data, setData] = useState([])
   const [gridView, setGridView] = useState(true)
 
@@ -19,9 +19,14 @@ const Index = ({ walletAddress, isChecking }) => {
   }
 
   useEffect(() => {
-    getStakedData()
+    if (stakedList === undefined) {
+      getStakedData()
+    } else {
+      setData(stakedList)
+    }
+
     // eslint-disable-next-line
-  }, [walletAddress])
+  }, [walletAddress, stakedList])
 
   return (
     <div>

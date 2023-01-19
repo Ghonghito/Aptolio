@@ -51,12 +51,17 @@ export const checkJungle = async (walletAddress) => {
   }
 }
 
-export const getUserStakedMonkeysUSD = async (address) => {
+export const getUserStakedMonkeysUSD = async (data) => {
   const getMonkeysFP = await getFloorPrice('0xf932dcb9835e681b21d2f411ef99f4f5e577e6ac299eebee2272a39fb348f702::Aptos Monkeys')
   const aptFloor = Number(getMonkeysFP.data.data.floor) / 10 ** 8
   const getAPTPrice = await getCoinData('aptos')
   const aptPrice = getAPTPrice.data.market_data.current_price.usd
-  const getStakedMonkeys = await checkJungle(address)
+  let getStakedMonkeys = null
+  if (typeof data === 'string') {
+    getStakedMonkeys = await checkJungle(data)
+  } else {
+    getStakedMonkeys = data
+  }
 
   if (getStakedMonkeys.status === 200 && getStakedMonkeys.staked === true) {
     const numberOfMonkeys = getStakedMonkeys.data.length

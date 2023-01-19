@@ -10,10 +10,9 @@ import { getUserStakedAptoads } from 'utils/Ecosystem/Aptoads'
 import TableView from './TableView'
 import WithdrawButton from './WithdrawButton'
 
-const Index = ({ walletAddress, isChecking }) => {
+const Index = ({ walletAddress, stakedList, isChecking }) => {
   const [gridView, setGridView] = useState(true)
   const [data, setData] = useState([])
-
   const calculateStakedTime = (timestamp) => {
     const currentDate = moment()
     const stakedTime = moment(timestamp * 1000)
@@ -52,9 +51,13 @@ const Index = ({ walletAddress, isChecking }) => {
   }
 
   useEffect(() => {
-    getStakingData()
+    if (stakedList === undefined) {
+      getStakingData()
+    } else {
+      setData(stakedList)
+    }
     // eslint-disable-next-line
-  }, [walletAddress])
+  }, [walletAddress, stakedList])
 
   return (
     <div>
